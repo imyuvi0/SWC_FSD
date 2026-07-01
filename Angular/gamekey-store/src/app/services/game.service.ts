@@ -13,7 +13,7 @@ export interface Game {
   providedIn: 'root'
 })
 export class GameService {
-  private apiUrl = 'https://swc-fsd.vercel.app/api/games/';
+  private apiUrl = 'https://swc-fsd-backend.vercel.app/api/games/';
 
   constructor(private http: HttpClient) {}
 
