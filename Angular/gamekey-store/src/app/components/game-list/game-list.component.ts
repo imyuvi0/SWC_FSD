@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -15,7 +15,8 @@ export class GameListComponent implements OnInit {
   newGameTitle: string = '';
   newGamePrice: number = 0;
   
-  games: Game[] = [];
+  // Use Angular Signals for reactive state tracking in zoneless mode
+  games = signal<Game[]>([]);
 
   constructor(private gameService: GameService) {}
 
@@ -24,9 +25,11 @@ export class GameListComponent implements OnInit {
   }
 
   fetchGames(): void {
+    console.log('fetchGames called');
     this.gameService.getGames().subscribe({
       next: (data: Game[]) => {
-        this.games = data;
+        console.log('Fetched games data:', data);
+        this.games.set(data);
       },
       error: (err) => {
         console.error('Error fetching games: ', err);
@@ -42,6 +45,9 @@ export class GameListComponent implements OnInit {
         this.fetchGames();
         this.newGameTitle = '';
         this.newGamePrice = 0;
+      },
+      error: (err) => {
+        console.error('Error adding game: ', err);
       }
     });
   }

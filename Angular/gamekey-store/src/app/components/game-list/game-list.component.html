@@ -35,13 +35,13 @@
   </div>
 
   <!-- Game List Results -->
-  @if (games.length === 0) {
+  @if (games().length === 0) {
     <div class="text-center py-12 bg-slate-950/20 rounded-xl border border-dashed border-slate-800">
       <p class="text-slate-500 text-lg">No games in inventory.</p>
     </div>
   } @else {
     <div class="space-y-4">
-      @for (game of games; track game.id) {
+      @for (game of games(); track game.id) {
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-slate-950/30 rounded-xl border border-slate-800/60 hover:border-slate-700/80 transition-all duration-200 hover:bg-slate-950/50 group">
           <div class="flex items-center gap-4 w-full sm:w-auto">
             <div class="h-10 w-10 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-400 font-bold border border-indigo-500/20 group-hover:bg-indigo-500/20 transition-all">

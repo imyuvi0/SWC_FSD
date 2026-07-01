@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { GameService, Game } from '../../services/game.service';
@@ -11,7 +11,8 @@ import { GameService, Game } from '../../services/game.service';
   styleUrls: ['./game-detail.component.css']
 })
 export class GameDetailComponent implements OnInit {
-  game: Game | undefined;
+  // Use Angular Signals for reactive detail state tracking in zoneless mode
+  game = signal<Game | undefined>(undefined);
 
   constructor(
     private route: ActivatedRoute,
@@ -24,7 +25,7 @@ export class GameDetailComponent implements OnInit {
     
     this.gameService.getGameById(gameId).subscribe({
       next: (game) => {
-        this.game = game;
+        this.game.set(game);
       },
       error: (err) => {
         console.error('Error fetching game details: ', err);
