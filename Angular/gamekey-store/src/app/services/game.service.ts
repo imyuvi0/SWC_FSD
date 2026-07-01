@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 export interface Game {
   id: number;
@@ -12,34 +13,33 @@ export interface Game {
   providedIn: 'root'
 })
 export class GameService {
-  private games: Game[] = [
-    { id: 1, title: 'Half-Life 3', price: 29.99, available: true },
-    { id: 2, title: 'Cyberpunk 2077', price: 49.99, available: false },
-    { id: 3, title: 'Portal 3', price: 19.99, available: true }
-  ];
+  private apiUrl = 'http://127.0.0.1:8000/api/games/';
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
-  // Fetch games list as an Observable stream
-  getGames(): Observable<Game[]> {
-    return of(this.games);
-  }
-
-  // Append a new game to the local inventory list
-  addGame(title: string, price: number): Observable<Game> {
-    const newGame: Game = {
-      id: this.games.length + 1,
-      title: title,
-      price: price,
-      available: true
+  private getHttpOptions() {
+    // Read the authorization token from localStorage, fallback to pre-generated admin token for testing
+    const token = localStorage.getItem('token') || '8bdecdaffb820e0d53abbbc8c8fe0ca69b3e8e88';
+    return {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${token}`
+      })
     };
-    this.games.push(newGame);
-    return of(newGame);
   }
 
-  // Find a specific game by its numeric ID
-  getGameById(id: number): Observable<Game | undefined> {
-    const game = this.games.find(g => g.id === id);
-    return of(game);
+  // Fetch games list from the live Django API
+  getGames(): Observable<Game[]> {
+    return this.http.get<Game[]>(this.apiUrl);
+  }
+
+  // Add a new game via a POST request to the Django API
+  addGame(title: string, price: number): Observable<Game> {
+    return this.http.post<Game>(this.apiUrl, { title, price }, this.getHttpOptions());
+  }
+
+  // Find a specific game by its numeric ID from the Django API
+  getGameById(id: number): Observable<Game> {
+    return this.http.get<Game>(`${this.apiUrl}${id}/`);
   }
 }
