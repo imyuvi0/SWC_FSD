@@ -10,9 +10,22 @@ router.register(r'games', GameViewSet)
 router.register(r'publishers', PublisherViewSet)
 
 def api_root(request):
+    import traceback
+    db_status = "Unknown"
+    error_trace = ""
+    try:
+        from django.db import connection
+        connection.ensure_connection()
+        db_status = "Connected successfully!"
+    except Exception as e:
+        db_status = f"Connection failed: {str(e)}"
+        error_trace = traceback.format_exc()
+
     return JsonResponse({
         "message": "Welcome to the Game Key Platform API backend!",
         "version": "1.0",
+        "db_status": db_status,
+        "error_trace": error_trace,
         "endpoints": {
             "games": "/api/games/",
             "publishers": "/api/publishers/",
@@ -21,6 +34,7 @@ def api_root(request):
             "admin": "/admin/"
         }
     })
+
 
 urlpatterns = [
     path('', api_root, name='api-root'),
