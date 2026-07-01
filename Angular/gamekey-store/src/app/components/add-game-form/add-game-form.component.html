@@ -1,0 +1,77 @@
+<div class="max-w-xl mx-auto mt-12 p-8 bg-slate-900/60 backdrop-blur-md rounded-2xl border border-slate-800 shadow-2xl">
+  <div class="text-center mb-8">
+    <div class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-500/10 text-violet-400 font-black text-xl border border-violet-500/20 mb-4">
+      ✏️
+    </div>
+    <h2 class="text-3xl font-extrabold text-white tracking-tight">Add Game to Catalog</h2>
+    <p class="text-slate-400 text-sm mt-1">Fill out the details below to add a game using Angular Reactive Forms.</p>
+  </div>
+
+  <form [formGroup]="gameForm" (ngSubmit)="onSubmit()" class="space-y-6">
+    <!-- Game Title Field -->
+    <div>
+      <label for="title" class="block text-slate-300 font-semibold text-sm mb-2">Game Title</label>
+      <input 
+        id="title"
+        type="text" 
+        formControlName="title" 
+        placeholder="e.g. Elden Ring"
+        class="w-full px-4 py-3 rounded-xl bg-slate-950 border text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition duration-200 text-sm"
+        [ngClass]="{
+          'border-slate-850 focus:border-violet-500 focus:ring-violet-500/20': !gameForm.get('title')?.touched || gameForm.get('title')?.valid,
+          'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20': gameForm.get('title')?.touched && gameForm.get('title')?.invalid
+        }"
+      />
+      @if (gameForm.get('title')?.touched && gameForm.get('title')?.invalid) {
+        <div class="mt-2 text-rose-400 text-xs font-medium space-y-1">
+          @if (gameForm.get('title')?.errors?.['required']) {
+            <p class="flex items-center gap-1.5"><span>●</span> Game title is required.</p>
+          }
+          @if (gameForm.get('title')?.errors?.['titleUppercase']) {
+            <p class="flex items-center gap-1.5"><span>●</span> Game title must start with an uppercase letter.</p>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Game Price Field -->
+    <div>
+      <label for="price" class="block text-slate-300 font-semibold text-sm mb-2">Price ($)</label>
+      <input 
+        id="price"
+        type="number" 
+        formControlName="price" 
+        placeholder="9.99"
+        class="w-full px-4 py-3 rounded-xl bg-slate-950 border text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition duration-200 text-sm"
+        [ngClass]="{
+          'border-slate-850 focus:border-violet-500 focus:ring-violet-500/20': !gameForm.get('price')?.touched || gameForm.get('price')?.valid,
+          'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20': gameForm.get('price')?.touched && gameForm.get('price')?.invalid
+        }"
+      />
+      @if (gameForm.get('price')?.touched && gameForm.get('price')?.invalid) {
+        <div class="mt-2 text-rose-400 text-xs font-medium space-y-1">
+          @if (gameForm.get('price')?.errors?.['required']) {
+            <p class="flex items-center gap-1.5"><span>●</span> Price is required.</p>
+          }
+          @if (gameForm.get('price')?.errors?.['min']) {
+            <p class="flex items-center gap-1.5"><span>●</span> Price must be at least $1.00.</p>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+      <a routerLink="/games" 
+        class="px-5 py-2.5 rounded-xl text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-750 font-medium transition duration-200 text-sm">
+        Cancel
+      </a>
+      <button 
+        type="submit" 
+        [disabled]="gameForm.invalid"
+        class="px-6 py-2.5 rounded-xl text-white font-bold bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-violet-600 disabled:hover:to-indigo-600 shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:-translate-y-0.5 disabled:hover:translate-y-0 transition-all duration-200 text-sm">
+        Save Game
+      </button>
+    </div>
+  </form>
+</div>
