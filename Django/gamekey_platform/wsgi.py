@@ -13,12 +13,6 @@ from django.core.management import call_command
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'gamekey_platform.settings')
 
-# Run migrations automatically on serverless function startup
-try:
-    call_command('migrate', interactive=False)
-except Exception as e:
-    print("Auto-migration failed:", e)
-
 application = get_wsgi_application()
 app = application
 
