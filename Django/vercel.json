@@ -1,0 +1,19 @@
+{
+  "builds": [
+    {
+      "src": "gamekey_platform/wsgi.py",
+      "use": "@vercel/python",
+      "config": { "maxDuration": 90 }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "gamekey_platform/wsgi.py"
+    }
+  ]
+}
