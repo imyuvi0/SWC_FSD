@@ -17,8 +17,12 @@ def api_root(request):
         from django.db import connection
         connection.ensure_connection()
         db_status = "Connected successfully!"
+        
+        from games.models import Game
+        list(Game.objects.all())
+        db_status += " (Query succeeded!)"
     except Exception as e:
-        db_status = f"Connection failed: {str(e)}"
+        db_status = f"Connection/Query failed: {str(e)}"
         error_trace = traceback.format_exc()
 
     return JsonResponse({
