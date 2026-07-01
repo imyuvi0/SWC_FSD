@@ -80,10 +80,17 @@ WSGI_APPLICATION = 'gamekey_platform.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+import os
+
+if 'VERCEL' in os.environ:
+    default_db_url = f"sqlite:////tmp/db.sqlite3"
+else:
+    default_db_url = f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
+
 DATABASES = {
     'default': config(
         'DATABASE_URL',
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        default=default_db_url,
         cast=dj_database_url.parse
     )
 }
